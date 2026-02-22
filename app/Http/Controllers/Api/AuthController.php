@@ -8,7 +8,8 @@ use App\Services\JwtService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -31,7 +32,7 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->input('password'), $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Belirtilen bilgilerle eşleşen bir hesap bulunamadı.'],
+                'email' => ['Hatalı email veya şifre. Lütfen giriş bilgilerinizi kontrol edin.'],
             ]);
         }
 
@@ -45,7 +46,9 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'surname' => $user->surname,
                 'email' => $user->email,
+                'phone' => $user->phone,
             ],
         ]);
     }
@@ -57,13 +60,17 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed', Password::defaults()],
+            'phone' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'string', 'confirmed', PasswordRule::defaults()],
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
+            'surname' => $validated['surname'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'],
             'password' => $validated['password'],
         ]);
 
@@ -77,7 +84,9 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'surname' => $user->surname,
                 'email' => $user->email,
+                'phone' => $user->phone,
             ],
         ], 201);
     }
@@ -93,7 +102,9 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'surname' => $user->surname,
                 'email' => $user->email,
+                'phone' => $user->phone,
             ],
         ]);
     }
@@ -104,5 +115,56 @@ class AuthController extends Controller
     public function logout(): JsonResponse
     {
         return response()->json(['message' => 'Çıkış yapıldı']);
+    }
+
+    /**
+     * Şifremi unuttum: e-posta ile sıfırlama linki gönderir.
+     */
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email'],
+        ]);
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        if ($status !== Password::RESET_LINK_SENT) {
+            throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Şifre sıfırlama linki e-posta adresinize gönderildi.',
+        ]);
+    }
+
+    /**
+     * Şifre sıfırlama: token ve yeni şifre ile şifreyi günceller.
+     */
+    public function resetPassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'token' => ['required', 'string'],
+            'password' => ['required', 'string', 'confirmed', PasswordRule::defaults()],
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'token', 'password'),
+            function ($user, $password): void {
+                $user->forceFill(['password' => $password])->save();
+            }
+        );
+
+        if ($status !== Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Şifreniz başarıyla güncellendi.',
+        ]);
     }
 }

@@ -4,7 +4,7 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
-		{ "key": "base_url", "value": "http://localhost:8000" },
+		{ "key": "base_url", "value": "http://localhost" },
 		{ "key": "token", "value": "" }
 	],
 	"item": [
@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Test Kullanıcı\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\"\n}"
+							"raw": "{\n  \"name\": \"Test\",\n  \"surname\": \"Kullanıcı\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"05551234567\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\"\n}"
 						},
 						"url": "{{base_url}}/api/auth/register"
 					}
@@ -72,6 +72,36 @@
 							{ "key": "Authorization", "value": "Bearer {{token}}" }
 						],
 						"url": "{{base_url}}/api/auth/logout"
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\"\n}"
+						},
+						"url": "{{base_url}}/api/auth/forgot-password"
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"token\": \"TOKEN_FROM_EMAIL\",\n  \"password\": \"yeni_sifre\",\n  \"password_confirmation\": \"yeni_sifre\"\n}"
+						},
+						"url": "{{base_url}}/api/auth/reset-password"
 					}
 				}
 			]

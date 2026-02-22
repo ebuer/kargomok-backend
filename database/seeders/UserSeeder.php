@@ -15,23 +15,31 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Test Kullanıcı',
+                'name' => 'Test',
+                'surname' => 'Kullanıcı',
                 'email' => 'test@example.com',
+                'phone' => '05551234567',
                 'password' => 'password',
             ],
             [
-                'name' => 'Ahmet Yılmaz',
+                'name' => 'Ahmet',
+                'surname' => 'Yılmaz',
                 'email' => 'ahmet@example.com',
+                'phone' => '05551234568',
                 'password' => 'password',
             ],
             [
-                'name' => 'Ayşe Demir',
+                'name' => 'Ayşe',
+                'surname' => 'Demir',
                 'email' => 'ayse@example.com',
+                'phone' => '05551234569',
                 'password' => 'password',
             ],
             [
-                'name' => 'Kargo Operatörü',
+                'name' => 'Kargo',
+                'surname' => 'Operatörü',
                 'email' => 'operator@example.com',
+                'phone' => '05551234570',
                 'password' => 'password',
             ],
         ];
@@ -41,6 +49,8 @@ class UserSeeder extends Seeder
                 ['email' => $data['email']],
                 [
                     'name' => $data['name'],
+                    'surname' => $data['surname'],
+                    'phone' => $data['phone'],
                     'password' => $data['password'],
                 ]
             );
