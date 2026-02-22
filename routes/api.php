@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\JwtAuth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,6 @@ Route::prefix('auth')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
     });
+
+    Route::post('google', [GoogleAuthController::class, 'login']);
 });

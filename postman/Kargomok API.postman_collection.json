@@ -51,6 +51,30 @@
 					}
 				},
 				{
+					"name": "Google Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": "var json = pm.response.json();\nif (json.token) pm.collectionVariables.set('token', json.token);",
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Accept", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_token\": \"GOOGLE_ID_TOKEN\"\n}"
+						},
+						"url": "{{base_url}}/api/auth/google"
+					}
+				},
+				{
 					"name": "Me",
 					"request": {
 						"method": "GET",
