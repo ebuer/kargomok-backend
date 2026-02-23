@@ -26,7 +26,7 @@ class GoogleAuthController extends Controller
 
         if (substr_count($idToken, '.') !== 2) {
             return response()->json([
-                'message' => 'Invalid id_token format. Use the Google ID token (credential or id_token from Google Sign-In), not the access_token.',
+                'message' => 'Geçersiz id_token biçimi. Google erişim belirteci (access_token) değil, Google ile girişten alınan kimlik belirtecini (credential veya id_token) kullanın.',
             ], 400);
         }
 
@@ -38,16 +38,16 @@ class GoogleAuthController extends Controller
             $payload = $client->verifyIdToken($idToken);
         } catch (\Throwable $e) {
             return response()->json([
-                'message' => 'Invalid or malformed Google ID token. Ensure you are sending the id_token from Google Sign-In.',
+                'message' => 'Geçersiz veya hatalı Google kimlik belirteci. Google ile girişten alınan id_token gönderdiğinizden emin olun.',
             ], 401);
         }
 
         if (! $payload) {
-            return response()->json(['message' => 'Invalid Google token'], 401);
+            return response()->json(['message' => 'Geçersiz Google belirteci'], 401);
         }
 
         if ($payload['aud'] !== config('services.google.client_id')) {
-            return response()->json(['message' => 'Invalid audience'], 401);
+            return response()->json(['message' => 'Geçersiz hedef kitle (audience)'], 401);
         }
 
         $fullName = trim($payload['name'] ?? '');
@@ -69,7 +69,7 @@ class GoogleAuthController extends Controller
         $token = $this->jwt->createToken($user);
 
         return response()->json([
-            'message' => 'Login successful',
+            'message' => 'Giriş başarılı',
             'token' => $token,
             'token_type' => 'Bearer',
             'expires_in' => config('jwt.ttl', 60) * 60,

@@ -1,0 +1,7 @@
+{
+    "Not Found": "Sayfa veya kaynak bulunamadı.",
+    "Unauthorized": "Yetkisiz erişim.",
+    "Forbidden": "Bu işlem için yetkiniz yok.",
+    "Server Error": "Sunucu hatası. Lütfen daha sonra tekrar deneyin.",
+    "Too Many Attempts.": "Çok fazla deneme. Lütfen daha sonra tekrar deneyin."
+}
