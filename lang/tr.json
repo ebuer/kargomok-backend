@@ -3,5 +3,8 @@
     "Unauthorized": "Yetkisiz erişim.",
     "Forbidden": "Bu işlem için yetkiniz yok.",
     "Server Error": "Sunucu hatası. Lütfen daha sonra tekrar deneyin.",
-    "Too Many Attempts.": "Çok fazla deneme. Lütfen daha sonra tekrar deneyin."
+    "Too Many Attempts.": "Çok fazla deneme. Lütfen daha sonra tekrar deneyin.",
+    "The given data was invalid.": "Gönderilen veri geçersiz.",
+    "(and :count more error)": "ve 1 hata daha",
+    "(and :count more errors)": "ve :count hata daha"
 }

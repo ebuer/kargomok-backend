@@ -175,6 +175,7 @@ return [
         'password_confirmation' => 'şifre onayı',
         'phone' => 'telefon',
         'surname' => 'soyad',
+        'token' => 'sıfırlama bağlantısı',
         'id_token' => 'Google kimlik belirteci',
     ],
 
